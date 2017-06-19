@@ -1,0 +1,1 @@
+Testing Cypress NPM installation.
