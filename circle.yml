@@ -1,5 +1,22 @@
 test:
   override:
+    - echo "Testing Node 0.12"
     - nvm install 0.12
     - npm install cypress@$CYPRESS_TAG
     - $(npm bin)/cypress verify
+    - rm -rf node_modules
+    - echo "Testing Node 4"
+    - nvm install 4
+    - npm install cypress@$CYPRESS_TAG
+    - $(npm bin)/cypress verify
+    - rm -rf node_modules
+    - echo "Testing Node 6"
+    - nvm install 6
+    - npm install cypress@$CYPRESS_TAG
+    - $(npm bin)/cypress verify
+    - rm -rf node_modules
+    - echo "Testing Node 8"
+    - nvm install 8
+    - npm install cypress@$CYPRESS_TAG
+    - $(npm bin)/cypress verify
+    - rm -rf node_modules
