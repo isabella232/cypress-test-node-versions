@@ -5,17 +5,21 @@ defaults: &defaults
   working_directory: ~/app
 
 jobs:
-  # "node-0.12":
-  #   <<: *defaults
-  #   steps:
-  #     - run: npm install cypress@$CYPRESS_TAG
-  #     - run: $(npm bin)/cypress verify
+  "node-0.12":
+    <<: *defaults
+    docker:
+      - image: cypress/base:0.12
+    steps:
+      - run: npm install cypress@$CYPRESS_TAG
+      - run: DEBUG=cypress:cli $(npm bin)/cypress verify
 
-  # "node-4":
-  #   <<: *defaults
-  #   steps:
-  #     - run: npm install cypress@$CYPRESS_TAG
-  #     - run: $(npm bin)/cypress verify
+  "node-4":
+    <<: *defaults
+    docker:
+      - image: cypress/base:4
+    steps:
+      - run: npm install cypress@$CYPRESS_TAG
+      - run: DEBUG=cypress:cli $(npm bin)/cypress verify
 
   "node-6":
     <<: *defaults
@@ -23,7 +27,7 @@ jobs:
       - image: cypress/base:6
     steps:
       - run: npm install cypress@$CYPRESS_TAG
-      - run: $(npm bin)/cypress verify
+      - run: DEBUG=cypress:cli $(npm bin)/cypress verify
 
   "node-8":
     <<: *defaults
@@ -32,13 +36,13 @@ jobs:
     steps:
       - run: npm init -y
       - run: npm install cypress@$CYPRESS_TAG
-      - run: $(npm bin)/cypress verify
+      - run: DEBUG=cypress:cli $(npm bin)/cypress verify
 
 workflows:
   version: 2
   test-cypress-installs:
     jobs:
-      # - node-0.12
-      # - node-4
+      - node-0.12
+      - node-4
       - node-6
       - node-8
