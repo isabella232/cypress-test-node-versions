@@ -30,6 +30,7 @@ jobs:
     docker:
       - image: cypress/base:8
     steps:
+      - run: npm init -y
       - run: npm install cypress@$CYPRESS_TAG
       - run: $(npm bin)/cypress verify
 
