@@ -3,37 +3,35 @@ version: 2
 defaults: &defaults
   parallelism: 1
   working_directory: ~/app
+  docker:
+      - image: cypress/base
 
 jobs:
   "node-0.12":
     <<: *defaults
-    docker:
-      - image: node:0.12
     steps:
+      - run: nvm install 0.12
       - run: npm install cypress@$CYPRESS_TAG
       - run: $(npm bin)/cypress verify
 
   "node-4":
     <<: *defaults
-    docker:
-      - image: node:4
     steps:
+      - run: nvm install 4
       - run: npm install cypress@$CYPRESS_TAG
       - run: $(npm bin)/cypress verify
 
   "node-6":
     <<: *defaults
-    docker:
-      - image: node:6
     steps:
+      - run: nvm install 6
       - run: npm install cypress@$CYPRESS_TAG
       - run: $(npm bin)/cypress verify
 
   "node-8":
     <<: *defaults
-    docker:
-      - image: node:8
     steps:
+      - run: nvm install 8
       - run: npm install cypress@$CYPRESS_TAG
       - run: $(npm bin)/cypress verify
 
