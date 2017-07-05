@@ -33,7 +33,7 @@ jobs:
     <<: *defaults
     docker:
       - image: cypress/base:8
-        user: person
+        user: node
     steps:
       - run: npm init -y
       - run: npm install cypress@$CYPRESS_TAG
