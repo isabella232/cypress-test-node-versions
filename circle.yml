@@ -1,22 +1,47 @@
-test:
-  override:
-    - echo "Testing Node 0.12"
-    - nvm install 0.12
-    - npm install cypress@$CYPRESS_TAG
-    - $(npm bin)/cypress verify
-    - rm -rf node_modules
-    - echo "Testing Node 4"
-    - nvm install 4
-    - npm install cypress@$CYPRESS_TAG
-    - $(npm bin)/cypress verify
-    - rm -rf node_modules
-    - echo "Testing Node 6"
-    - nvm install 6
-    - npm install cypress@$CYPRESS_TAG
-    - $(npm bin)/cypress verify
-    - rm -rf node_modules
-    - echo "Testing Node 8"
-    - nvm install 8
-    - npm install cypress@$CYPRESS_TAG
-    - $(npm bin)/cypress verify
-    - rm -rf node_modules
+version: 2
+
+defaults: &defaults
+  parallelism: 1
+  working_directory: ~/app
+
+jobs:
+  "node-0.12":
+    <<: *defaults
+    docker:
+      - image: node:0.12
+    steps:
+      - run: npm install cypress@$CYPRESS_TAG
+      - run: $(npm bin)/cypress verify
+
+  "node-4":
+    <<: *defaults
+    docker:
+      - image: node:4
+    steps:
+      - run: npm install cypress@$CYPRESS_TAG
+      - run: $(npm bin)/cypress verify
+
+  "node-6":
+    <<: *defaults
+    docker:
+      - image: node:6
+    steps:
+      - run: npm install cypress@$CYPRESS_TAG
+      - run: $(npm bin)/cypress verify
+
+  "node-8":
+    <<: *defaults
+    docker:
+      - image: node:8
+    steps:
+      - run: npm install cypress@$CYPRESS_TAG
+      - run: $(npm bin)/cypress verify
+
+workflows:
+  version: 2
+  test-cypress-installs:
+    jobs:
+      - node-0.12
+      - node-4
+      - node-6
+      - node-8
