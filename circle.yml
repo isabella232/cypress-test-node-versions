@@ -35,7 +35,6 @@ jobs:
     <<: *defaults
     docker:
       - image: cypress/base:8
-        user: node
     steps:
       - run: npm install -g cypress@$CYPRESS_TAG
       - run: DEBUG=cypress:cli cypress verify
@@ -44,7 +43,6 @@ workflows:
   version: 2
   test-cypress-installs:
     jobs:
-      - node-0.12
       - node-4
       - node-6
       - node-8
