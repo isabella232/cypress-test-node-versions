@@ -31,6 +31,15 @@ jobs:
       - run: npm install cypress@$CYPRESS_TAG
       - run: DEBUG=cypress:cli $(npm bin)/cypress verify
 
+  "node-8-global":
+    <<: *defaults
+    docker:
+      - image: cypress/base:8
+        user: node
+    steps:
+      - run: npm install -g cypress@$CYPRESS_TAG
+      - run: DEBUG=cypress:cli cypress verify
+
 workflows:
   version: 2
   test-cypress-installs:
@@ -39,3 +48,4 @@ workflows:
       - node-4
       - node-6
       - node-8
+      - node-8-global
