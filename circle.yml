@@ -41,6 +41,28 @@ jobs:
       - run: git clone https://github.com/bahmutov/foo-page.git
       - run: cd foo-page && cypress run
 
+  "node-8-global-kitchen-sink":
+    <<: *defaults
+    docker:
+      - image: cypress/base:8
+    steps:
+      - run: npm install -g cypress@$CYPRESS_TAG
+      - run: DEBUG=cypress:cli cypress verify
+      - run: git clone https://github.com/cypress-io/cypress-example-kitchensink.git
+      - run:
+          name: Install Kitchensink deps (but only the server)
+          command: |
+            cd cypress-example-kitchensink
+            git checkout 0.20.0
+            npm install --production
+      - run:
+          name: Start Kitchensink example server
+          command: cd cypress-example-kitchensink && npm start
+          background: true
+      - run:
+          name: Running tests against Kitchensink example
+          command: cd cypress-example-kitchensink && cypress run
+
 workflows:
   version: 2
   test-cypress-installs:
@@ -49,3 +71,4 @@ workflows:
       - node-6
       - node-8
       - node-8-global
+      - node-8-global-kitchen-sink
