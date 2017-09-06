@@ -54,6 +54,8 @@ jobs:
           command: |
             cd cypress-example-kitchensink
             git checkout 0.20.0
+            npm install
+            npm start &
             cypress run
 
 workflows:
