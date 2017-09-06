@@ -50,13 +50,18 @@ jobs:
       - run: DEBUG=cypress:cli cypress verify
       - run: git clone https://github.com/cypress-io/cypress-example-kitchensink.git
       - run:
-          name: Test Kitchensink example
+          name: Install Kitchensink deps (but only the server)
           command: |
             cd cypress-example-kitchensink
             git checkout 0.20.0
-            npm install
-            npm start &
-            cypress run
+            npm install --production
+      - run:
+          name: Start Kitchensink example server
+          command: cd cypress-example-kitchensink && npm start
+          background: true
+      - run:
+          name: Running tests against Kitchensink example
+          command: cd cypress-example-kitchensink && cypress run
 
 workflows:
   version: 2
