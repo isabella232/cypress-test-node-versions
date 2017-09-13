@@ -41,6 +41,22 @@ jobs:
       - run: git clone https://github.com/bahmutov/foo-page.git
       - run: cd foo-page && cypress run
 
+  "yarn":
+    <<: *defaults
+    docker:
+      - image: cypress/base:8
+    steps:
+      - run: npm install -g yarn
+      - run: DEBUG=cypress:cli cypress verify
+      - run: git clone https://github.com/bahmutov/foo-page.git
+      - run:
+          name: Install Cypress with Yarn
+          command: |
+            cd foo-page
+            yarn add -D cypress@$CYPRESS_TAG
+            $(npm bin)/cypress verify
+            $(npm bin)/cypress run
+
   "node-8-global-kitchen-sink":
     <<: *defaults
     docker:
@@ -72,3 +88,4 @@ workflows:
       - node-8
       - node-8-global
       - node-8-global-kitchen-sink
+      - yarn
