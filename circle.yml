@@ -10,7 +10,7 @@ jobs:
     docker:
       - image: cypress/base:4
     steps:
-      - run: npm install cypress@$CYPRESS_TAG
+      - run: npm install $CYPRESS_NPM_PACKAGE_NAME
       - run: DEBUG=cypress:cli $(npm bin)/cypress verify
 
   "node-6":
@@ -18,7 +18,7 @@ jobs:
     docker:
       - image: cypress/base:6
     steps:
-      - run: npm install cypress@$CYPRESS_TAG
+      - run: npm install $CYPRESS_NPM_PACKAGE_NAME
       - run: DEBUG=cypress:cli $(npm bin)/cypress verify
 
   "node-8":
@@ -28,7 +28,7 @@ jobs:
         user: node
     steps:
       - run: npm init -y
-      - run: npm install cypress@$CYPRESS_TAG
+      - run: npm install $CYPRESS_NPM_PACKAGE_NAME
       - run: DEBUG=cypress:cli $(npm bin)/cypress verify
 
   "node-8-global":
@@ -36,7 +36,7 @@ jobs:
     docker:
       - image: cypress/base:8
     steps:
-      - run: npm install -g cypress@$CYPRESS_TAG
+      - run: npm install -g $CYPRESS_NPM_PACKAGE_NAME
       - run: DEBUG=cypress:cli cypress verify
       - run: git clone https://github.com/bahmutov/foo-page.git
       - run: cd foo-page && cypress run
@@ -52,7 +52,7 @@ jobs:
           name: Install Cypress with Yarn
           command: |
             cd foo-page
-            yarn add -D cypress@$CYPRESS_TAG
+            yarn add -D $CYPRESS_NPM_PACKAGE_NAME
             $(npm bin)/cypress verify
             $(npm bin)/cypress run
 
@@ -61,7 +61,7 @@ jobs:
     docker:
       - image: cypress/base:8
     steps:
-      - run: npm install -g cypress@$CYPRESS_TAG
+      - run: npm install -g $CYPRESS_NPM_PACKAGE_NAME
       - run: DEBUG=cypress:cli cypress verify
       - run: git clone https://github.com/cypress-io/cypress-example-kitchensink.git
       - run:
