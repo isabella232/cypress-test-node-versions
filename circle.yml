@@ -12,6 +12,7 @@ jobs:
     steps:
       - run: echo install $CYPRESS_NPM_PACKAGE_NAME
       - run: npm install $CYPRESS_NPM_PACKAGE_NAME
+      - run: $(npm bin)/cypress version
       - run: DEBUG=cypress:cli $(npm bin)/cypress verify
 
   "node-6":
@@ -21,6 +22,7 @@ jobs:
     steps:
       - run: echo install $CYPRESS_NPM_PACKAGE_NAME
       - run: npm install $CYPRESS_NPM_PACKAGE_NAME
+      - run: $(npm bin)/cypress version
       - run: DEBUG=cypress:cli $(npm bin)/cypress verify
 
   "node-8":
@@ -32,6 +34,7 @@ jobs:
       - run: npm init -y
       - run: echo install $CYPRESS_NPM_PACKAGE_NAME
       - run: npm install $CYPRESS_NPM_PACKAGE_NAME
+      - run: $(npm bin)/cypress version
       - run: DEBUG=cypress:cli $(npm bin)/cypress verify
 
   "node-8-global":
@@ -58,6 +61,7 @@ jobs:
             cd foo-page
             echo install $CYPRESS_NPM_PACKAGE_NAME
             yarn add -D $CYPRESS_NPM_PACKAGE_NAME
+            $(npm bin)/cypress version
             $(npm bin)/cypress verify
             $(npm bin)/cypress run
 
@@ -72,7 +76,8 @@ jobs:
           name: Install Cypress with Yarn 1.1.0
           command: |
             cd foo-page
-            yarn add -D cypress@$CYPRESS_TAG
+            yarn add -D $CYPRESS_NPM_PACKAGE_NAME
+            $(npm bin)/cypress version
 
   "node-8-global-kitchen-sink":
     <<: *defaults
