@@ -76,6 +76,7 @@ jobs:
           name: Install Cypress with Yarn 1.1.0
           command: |
             cd foo-page
+            echo Installing Cypress from $CYPRESS_NPM_PACKAGE_NAME
             yarn add -D $CYPRESS_NPM_PACKAGE_NAME
             $(npm bin)/cypress version
 
