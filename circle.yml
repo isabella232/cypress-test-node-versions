@@ -63,9 +63,15 @@ jobs:
           command: |
             echo install $CYPRESS_NPM_PACKAGE_NAME
             yarn add -D $CYPRESS_NPM_PACKAGE_NAME
-            $(npm bin)/cypress version
-            $(npm bin)/cypress verify
-            $(npm bin)/cypress run
+      - run:
+          command: $(npm bin)/cypress version
+          working_directory: cypress-test-tiny
+      - run:
+          command: $(npm bin)/cypress verify
+          working_directory: cypress-test-tiny
+      - run:
+          command: $(npm bin)/cypress run
+          working_directory: cypress-test-tiny
 
   "yarn-1.1":
     <<: *defaults
@@ -80,7 +86,9 @@ jobs:
           command: |
             echo Installing Cypress from $CYPRESS_NPM_PACKAGE_NAME
             yarn add -D $CYPRESS_NPM_PACKAGE_NAME
-            $(npm bin)/cypress version
+      - run:
+          command: $(npm bin)/cypress version
+          working_directory: cypress-test-tiny
 
   "yarn-1.1-cypress-0.20.3":
     <<: *defaults
@@ -92,9 +100,10 @@ jobs:
       - run:
           name: Install Cypress with Yarn 1.1.0
           working_directory: cypress-test-tiny
-          command: |
-            yarn add -D cypress@0.20.3
-            $(npm bin)/cypress version
+          command: yarn add -D cypress@0.20.3
+      - run:
+          command: $(npm bin)/cypress version
+          working_directory: cypress-test-tiny
 
   "node-8-global-kitchen-sink":
     <<: *defaults
@@ -107,17 +116,19 @@ jobs:
       - run: git clone https://github.com/cypress-io/cypress-example-kitchensink.git
       - run:
           name: Install Kitchensink deps (but only the server)
+          working_directory: cypress-example-kitchensink
           command: |
-            cd cypress-example-kitchensink
             git checkout 0.20.0
             npm install --production
       - run:
           name: Start Kitchensink example server
-          command: cd cypress-example-kitchensink && npm start
+          command: npm start
+          working_directory: cypress-example-kitchensink
           background: true
       - run:
           name: Running tests against Kitchensink example
-          command: cd cypress-example-kitchensink && cypress run
+          command: cypress run
+          working_directory: cypress-example-kitchensink
 
 workflows:
   version: 2
