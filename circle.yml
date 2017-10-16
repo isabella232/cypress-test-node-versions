@@ -45,7 +45,7 @@ jobs:
       - run: echo install $CYPRESS_NPM_PACKAGE_NAME
       - run: npm install -g $CYPRESS_NPM_PACKAGE_NAME
       - run: DEBUG=cypress:cli cypress verify
-      - run: git clone https://github.com/cypress/cypress-test-tiny.git
+      - run: git clone https://github.com/cypress-io/cypress-test-tiny.git
       - run:
           command: cypress run
           working_directory: cypress-test-tiny
@@ -56,7 +56,7 @@ jobs:
       - image: cypress/base:8
     steps:
       - run: npm install -g yarn
-      - run: git clone https://github.com/cypress/cypress-test-tiny.git
+      - run: git clone https://github.com/cypress-io/cypress-test-tiny.git
       - run:
           name: Install Cypress with Yarn
           working_directory: cypress-test-tiny
@@ -73,7 +73,7 @@ jobs:
       - image: node:8.6
     steps:
       - run: npm install -g yarn@1.1.0
-      - run: git clone https://github.com/cypress/cypress-test-tiny.git
+      - run: git clone https://github.com/cypress-io/cypress-test-tiny.git
       - run:
           name: Install Cypress with Yarn 1.1.0
           working_directory: cypress-test-tiny
@@ -88,7 +88,7 @@ jobs:
       - image: node:8.6
     steps:
       - run: npm install -g yarn@1.1.0
-      - run: git clone https://github.com/cypress/cypress-test-tiny.git
+      - run: git clone https://github.com/cypress-io/cypress-test-tiny.git
       - run:
           name: Install Cypress with Yarn 1.1.0
           working_directory: cypress-test-tiny
