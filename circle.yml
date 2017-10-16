@@ -45,8 +45,10 @@ jobs:
       - run: echo install $CYPRESS_NPM_PACKAGE_NAME
       - run: npm install -g $CYPRESS_NPM_PACKAGE_NAME
       - run: DEBUG=cypress:cli cypress verify
-      - run: git clone https://github.com/bahmutov/foo-page.git
-      - run: cd foo-page && cypress run
+      - run: git clone https://github.com/cypress/cypress-test-tiny.git
+      - run:
+          command: cypress run
+          working_directory: cypress-test-tiny
 
   "yarn":
     <<: *defaults
@@ -54,11 +56,11 @@ jobs:
       - image: cypress/base:8
     steps:
       - run: npm install -g yarn
-      - run: git clone https://github.com/bahmutov/foo-page.git
+      - run: git clone https://github.com/cypress/cypress-test-tiny.git
       - run:
           name: Install Cypress with Yarn
+          working_directory: cypress-test-tiny
           command: |
-            cd foo-page
             echo install $CYPRESS_NPM_PACKAGE_NAME
             yarn add -D $CYPRESS_NPM_PACKAGE_NAME
             $(npm bin)/cypress version
@@ -71,11 +73,11 @@ jobs:
       - image: node:8.6
     steps:
       - run: npm install -g yarn@1.1.0
-      - run: git clone https://github.com/bahmutov/foo-page.git
+      - run: git clone https://github.com/cypress/cypress-test-tiny.git
       - run:
           name: Install Cypress with Yarn 1.1.0
+          working_directory: cypress-test-tiny
           command: |
-            cd foo-page
             echo Installing Cypress from $CYPRESS_NPM_PACKAGE_NAME
             yarn add -D $CYPRESS_NPM_PACKAGE_NAME
             $(npm bin)/cypress version
@@ -86,11 +88,11 @@ jobs:
       - image: node:8.6
     steps:
       - run: npm install -g yarn@1.1.0
-      - run: git clone https://github.com/bahmutov/foo-page.git
+      - run: git clone https://github.com/cypress/cypress-test-tiny.git
       - run:
           name: Install Cypress with Yarn 1.1.0
+          working_directory: cypress-test-tiny
           command: |
-            cd foo-page
             yarn add -D cypress@0.20.3
             $(npm bin)/cypress version
 
