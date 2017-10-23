@@ -148,6 +148,20 @@ jobs:
           name: Install cypress.zip
           command: CYPRESS_BINARY_VERSION=cypress.zip npm i $CYPRESS_NPM_PACKAGE_NAME
 
+  "chrome-browser":
+    <<: *defaults
+    docker:
+      - image: cypress/browsers:chrome62
+    steps:
+      - run: git clone https://github.com/cypress-io/cypress-test-tiny.git
+      - run:
+          working_directory: cypress-test-tiny
+          command: npm install
+      - run:
+          name: Test using Chrome
+          command: $(npm bin)/cypress run --browser chrome
+          working_directory: cypress-test-tiny
+
 workflows:
   version: 2
   test-cypress-installs:
@@ -160,6 +174,7 @@ workflows:
       - yarn
       - yarn-1.1
       - yarn-1.1-cypress-0.20.3
+      - chrome-browser
       # TODO: enable the test after Cypress NPM install supports local zip binary
       # https://github.com/cypress-io/cypress/issues/701
       # - install-zip-file
