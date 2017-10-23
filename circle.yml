@@ -160,4 +160,6 @@ workflows:
       - yarn
       - yarn-1.1
       - yarn-1.1-cypress-0.20.3
-      - install-zip-file
+      # TODO: enable the test after Cypress NPM install supports local zip binary
+      # https://github.com/cypress-io/cypress/issues/701
+      # - install-zip-file
