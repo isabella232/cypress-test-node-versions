@@ -136,11 +136,17 @@ jobs:
       - image: cypress/base:6
     steps:
       - run:
+          name: Start NPM package
+          command: npm init -y
+      - run:
           name: Download binary using curl
           command: curl -o cypress.zip -L $CYPRESS_BINARY_VERSION
       - run:
           name: Show files
           command: ls -l
+      - run:
+          name: Install cypress.zip
+          command: CYPRESS_BINARY_VERSION=cypress.zip npm i $CYPRESS_NPM_PACKAGE_NAME
 
 workflows:
   version: 2
