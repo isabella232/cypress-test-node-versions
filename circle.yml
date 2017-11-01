@@ -147,6 +147,9 @@ jobs:
       - run:
           name: Install cypress.zip
           command: CYPRESS_BINARY_VERSION=cypress.zip npm i $CYPRESS_NPM_PACKAGE_NAME
+      - run:
+          name: Verify installation
+          command: $(npm bin)/cypress verify
 
   "chrome-browser":
     <<: *defaults
