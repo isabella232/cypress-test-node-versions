@@ -169,12 +169,11 @@ workflows:
       - node-4
       - node-6
       - node-8
-      - node-8-global
-      - node-8-global-kitchen-sink
+      # disable global installs (permissions issues in Docker container)
+      # - node-8-global
+      # - node-8-global-kitchen-sink
       - yarn
       - yarn-1.1
       - yarn-1.1-cypress-0.20.3
       - chrome-browser
-      # TODO: enable the test after Cypress NPM install supports local zip binary
-      # https://github.com/cypress-io/cypress/issues/701
-      # - install-zip-file
+      - install-zip-file
