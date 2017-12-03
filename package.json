@@ -1,0 +1,19 @@
+{
+  "name": "cypress-test-node-versions",
+  "version": "1.0.0",
+  "description": "Testing Cypress app installation from NPM on different Node versions",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cypress-io/cypress-test-node-versions.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cypress-io/cypress-test-node-versions/issues"
+  },
+  "homepage": "https://github.com/cypress-io/cypress-test-node-versions#readme",
+  "devDependencies": {
+    "commit-message-install": "^1.4.0"
+  }
+}

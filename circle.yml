@@ -10,8 +10,8 @@ jobs:
     docker:
       - image: cypress/base:4
     steps:
-      - run: echo install $CYPRESS_NPM_PACKAGE_NAME
-      - run: npm install $CYPRESS_NPM_PACKAGE_NAME
+      - run: npm install
+      - run: $(npm bin)/commit-message-install
       - run: $(npm bin)/cypress version
       - run: DEBUG=cypress:cli $(npm bin)/cypress verify
 
@@ -20,8 +20,8 @@ jobs:
     docker:
       - image: cypress/base:6
     steps:
-      - run: echo install $CYPRESS_NPM_PACKAGE_NAME
-      - run: npm install $CYPRESS_NPM_PACKAGE_NAME
+      - run: npm install
+      - run: $(npm bin)/commit-message-install
       - run: $(npm bin)/cypress version
       - run: DEBUG=cypress:cli $(npm bin)/cypress verify
 
@@ -30,10 +30,10 @@ jobs:
     docker:
       - image: cypress/base:8
         user: node
-    steps:
+      steps:
       - run: npm init -y
-      - run: echo install $CYPRESS_NPM_PACKAGE_NAME
-      - run: npm install $CYPRESS_NPM_PACKAGE_NAME
+      - run: npm install
+      - run: $(npm bin)/commit-message-install
       - run: $(npm bin)/cypress version
       - run: DEBUG=cypress:cli $(npm bin)/cypress verify
 
@@ -161,6 +161,9 @@ jobs:
           working_directory: cypress-test-tiny
           command: npm install
       - run:
+          working_directory: cypress-tiny-test
+          command: $(npm bin)/commit-message-install
+      - run:
           name: Test using Chrome
           command: $(npm bin)/cypress run --browser chrome
           working_directory: cypress-test-tiny
@@ -175,8 +178,12 @@ workflows:
       # disable global installs (permissions issues in Docker container)
       # - node-8-global
       # - node-8-global-kitchen-sink
-      - yarn
-      - yarn-1.1
+
+      ## commenting out until we can install packages from yarn in commit message
+      # - yarn
+      # - yarn-1.1
       - yarn-1.1-cypress-0.20.3
+
+      ## comment out until we update cypress to add CYPRESS_NPM_PACKAGE_NAME to commit message
+      # - install-zip-file
       - chrome-browser
-      - install-zip-file
