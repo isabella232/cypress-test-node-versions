@@ -30,7 +30,7 @@ jobs:
     docker:
       - image: cypress/base:8
         user: node
-      steps:
+    steps:
       - run: npm init -y
       - run: npm install
       - run: $(npm bin)/commit-message-install
