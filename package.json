@@ -13,8 +13,7 @@
     "url": "https://github.com/cypress-io/cypress-test-node-versions/issues"
   },
   "homepage": "https://github.com/cypress-io/cypress-test-node-versions#readme",
-  "devDependencies": {},
-  "dependencies": {
+  "devDependencies": {
     "commit-message-install": "^1.4.0"
   }
 }
