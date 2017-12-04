@@ -170,6 +170,11 @@ jobs:
       - run:
           working_directory: cypress-test-tiny
           command: npm install
+      # because cypress-test-tiny no longer installs Cypress
+      # we need to install one
+      - run:
+          working_directory: cypress-test-tiny
+          command: npm install cypress
       - run:
           working_directory: cypress-test-tiny
           command: $(npm bin)/commit-message-install
