@@ -13,8 +13,8 @@ jobs:
       - checkout
       - run: npm install
       - run: $(npm bin)/commit-message-install
-      - run: $(npm bin)/cypress version
-      - run: DEBUG=cypress:cli $(npm bin)/cypress verify
+      - run: $(npm bin)/run-if $(npm bin)/cypress version
+      - run: DEBUG=cypress:cli $(npm bin)/run-if $(npm bin)/cypress verify
 
   "node-6":
     <<: *defaults
@@ -24,8 +24,8 @@ jobs:
       - checkout
       - run: npm install
       - run: $(npm bin)/commit-message-install
-      - run: $(npm bin)/cypress version
-      - run: DEBUG=cypress:cli $(npm bin)/cypress verify
+      - run: $(npm bin)/run-if $(npm bin)/cypress version
+      - run: DEBUG=cypress:cli $(npm bin)/run-if $(npm bin)/cypress verify
 
   "node-8":
     <<: *defaults
@@ -37,8 +37,8 @@ jobs:
       - run: npm init -y
       - run: npm install
       - run: $(npm bin)/commit-message-install
-      - run: $(npm bin)/cypress version
-      - run: DEBUG=cypress:cli $(npm bin)/cypress verify
+      - run: $(npm bin)/run-if $(npm bin)/cypress version
+      - run: DEBUG=cypress:cli $(npm bin)/run-if $(npm bin)/cypress verify
 
   "node-8-global":
     <<: *defaults
@@ -175,7 +175,7 @@ jobs:
           command: $(npm bin)/commit-message-install
       - run:
           name: Test using Chrome
-          command: $(npm bin)/cypress run --browser chrome
+          command: $(npm bin)/run-if $(npm bin)/cypress run --browser chrome
           working_directory: cypress-test-tiny
 
 workflows:
