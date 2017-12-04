@@ -171,7 +171,7 @@ jobs:
           working_directory: cypress-test-tiny
           command: npm install
       - run:
-          working_directory: cypress-tiny-test
+          working_directory: cypress-test-tiny
           command: $(npm bin)/commit-message-install
       - run:
           name: Test using Chrome
