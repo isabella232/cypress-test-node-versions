@@ -3,6 +3,8 @@ version: 2
 defaults: &defaults
   parallelism: 1
   working_directory: ~/app
+  environment:
+    - npm_config_engine_strict: 1
 
 jobs:
   "node-4":
