@@ -13,7 +13,7 @@ jobs:
       - image: cypress/base:4
     steps:
       - checkout
-      - run: npm install
+      - run: npm_config_engine_strict=0 npm install
       - run: $(npm bin)/commit-message-install
       - run: $(npm bin)/run-if $(npm bin)/cypress version
       - run: DEBUG=cypress:cli $(npm bin)/run-if $(npm bin)/cypress verify
@@ -24,7 +24,7 @@ jobs:
       - image: cypress/base:6
     steps:
       - checkout
-      - run: npm install
+      - run: npm_config_engine_strict=0 npm install
       - run: $(npm bin)/commit-message-install
       - run: $(npm bin)/run-if $(npm bin)/cypress version
       - run: DEBUG=cypress:cli $(npm bin)/run-if $(npm bin)/cypress verify
