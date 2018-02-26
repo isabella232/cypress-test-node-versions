@@ -13,6 +13,9 @@ jobs:
       - image: cypress/base:4
     steps:
       - checkout
+      # still need to NOT check Node engine version
+      # because commit message install does not allow Node 4
+      # even if it works there!
       - run: npm_config_engine_strict=0 npm install
       - run: $(npm bin)/commit-message-install
       - run: $(npm bin)/run-if $(npm bin)/cypress version
@@ -24,7 +27,7 @@ jobs:
       - image: cypress/base:6
     steps:
       - checkout
-      - run: npm_config_engine_strict=0 npm install
+      - run: npm install
       - run: $(npm bin)/commit-message-install
       - run: $(npm bin)/run-if $(npm bin)/cypress version
       - run: DEBUG=cypress:cli $(npm bin)/run-if $(npm bin)/cypress verify
@@ -176,7 +179,7 @@ jobs:
       # we need to install one
       - run:
           working_directory: cypress-test-tiny
-          command: npm_config_engine_strict=0 npm install cypress
+          command: npm install cypress
       - run:
           working_directory: cypress-test-tiny
           command: $(npm bin)/commit-message-install

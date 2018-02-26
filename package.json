@@ -15,6 +15,6 @@
   "homepage": "https://github.com/cypress-io/cypress-test-node-versions#readme",
   "devDependencies": {
     "commit-message-install": "^1.5.0",
-    "cypress": "^2.0.3"
+    "cypress": "^2.0.4"
   }
 }
