@@ -176,7 +176,7 @@ jobs:
       # we need to install one
       - run:
           working_directory: cypress-test-tiny
-          command: npm install cypress
+          command: npm_config_engine_strict=0 npm install cypress
       - run:
           working_directory: cypress-test-tiny
           command: $(npm bin)/commit-message-install
