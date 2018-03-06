@@ -39,6 +39,8 @@ jobs:
         user: node
     steps:
       - checkout
+      - run: node -v
+      - run: npm -v
       - run: npm init -y
       - run: npm install
       - run: $(npm bin)/commit-message-install
