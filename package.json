@@ -17,9 +17,11 @@
     "commit-message-install": "1.10.1",
     "cypress": "3.0.0",
     "execa-wrap": "1.4.0",
+    "lazy-ass": "1.6.0",
     "mocha": "5.2.0"
   },
   "scripts": {
-    "test": "mocha --timeout 180000 test/spec.js"
+    "test": "mocha --timeout 180000 test/spec.js",
+    "conditional-install": "commit-message-install --else \"echo nothing to install\""
   }
 }

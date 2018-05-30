@@ -1,5 +1,6 @@
 const execaWrap = require('execa-wrap')
 const cachedir = require('cachedir')
+const la = require('lazy-ass')
 
 const cacheFolder = cachedir('Cypress')
 console.log('Cache folder', cacheFolder)
@@ -12,34 +13,39 @@ console.log('Cache folder', cacheFolder)
 
 describe('Cypress caching', () => {
   before(() => {
-    return execaWrap('rm', ['-rf', cacheFolder]).then(console.log)
+    return execaWrap('rm', ['-rf', cacheFolder])
+      .then((() => console.log('deleted cache folder %s', cacheFolder)))
   })
 
-  const installCypress = () => {
-    const started = new Date()
-    return execaWrap('npm', ['install', 'cypress'])
-    .then(console.log)
-    .then(() => {
-      const ended = new Date()
-      return ended - started
-    })
-  }
+  const installCypress = () =>
+    execaWrap('npm', ['run', 'conditional-install'])
 
-  let installTook = 0
+  const nothingToInstallMessage = 'nothing to install'
+  const downloadingMessage = 'Downloading Cypress'
 
   it('runs first time in a few minutes', () => {
     return installCypress()
-      .then((took) => {
-        installTook = took
-        console.log('install took %d ms', installTook)
+      .then((output) => {
+        if (output.includes(nothingToInstallMessage)) {
+          console.log('there was nothing to install')
+        } else {
+          console.log('first test installed Cypress')
+          la(output.includes(downloadingMessage),
+            'expected to find downloading ... in the output\n', output)
+        }
       })
   })
 
   it('runs second time in a few seconds', () => {
     return installCypress()
-      .then((took) => {
-        console.log('install took %d ms', took)
-        console.assert(took < 0.5 * installTook, 'took too long')
+      .then((output) => {
+        if (output.includes(nothingToInstallMessage)) {
+          console.log('there was nothing to install')
+        } else {
+          console.log('second test installed Cypress')
+          la(!output.includes(downloadingMessage),
+            'found downloading ... in the output the second time around\n', output)
+        }
       })
   })
 })
