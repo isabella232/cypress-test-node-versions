@@ -47,6 +47,22 @@ jobs:
       - run: $(npm bin)/run-if $(npm bin)/cypress version
       - run: DEBUG=cypress:cli $(npm bin)/run-if $(npm bin)/cypress verify
 
+  "node-8-npm-ci":
+    <<: *defaults
+    docker:
+      - image: cypress/base:8
+        user: node
+    steps:
+      - checkout
+      - run: node -v
+      - run: npm -v
+      - run: npm init -y
+      - run: npm ci
+      - run: npm ci
+      - run: $(npm bin)/commit-message-install
+      - run: $(npm bin)/run-if $(npm bin)/cypress version
+      - run: DEBUG=cypress:cli $(npm bin)/run-if $(npm bin)/cypress verify
+
   "node-10":
     <<: *defaults
     docker:
@@ -212,6 +228,7 @@ workflows:
       - node-4
       - node-6
       - node-8
+      - node-8-npm-ci
       - node-10
       # disable global installs (permissions issues in Docker container)
       # - node-8-global
