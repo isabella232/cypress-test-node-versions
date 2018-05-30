@@ -45,6 +45,9 @@ describe('Cypress caching', () => {
           console.log('second test installed Cypress')
           la(!output.includes(downloadingMessage),
             'found downloading ... in the output the second time around\n', output)
+          const skippingMessage = 'Skipping installation:'
+          la(output.includes(skippingMessage),
+            'output does not include skipping message\n', output)
         }
       })
   })
