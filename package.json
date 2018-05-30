@@ -13,8 +13,8 @@
   },
   "homepage": "https://github.com/cypress-io/cypress-test-node-versions#readme",
   "devDependencies": {
-    "commit-message-install": "^1.5.0",
-    "cypress": "^2.0.4",
+    "commit-message-install": "1.10.1",
+    "cypress": "3.0.0",
     "execa-wrap": "1.4.0",
     "mocha": "5.2.0"
   },
