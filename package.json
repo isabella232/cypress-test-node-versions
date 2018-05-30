@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Testing Cypress app installation from NPM on different Node versions",
   "main": "index.js",
-  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cypress-io/cypress-test-node-versions.git"
@@ -15,6 +14,11 @@
   "homepage": "https://github.com/cypress-io/cypress-test-node-versions#readme",
   "devDependencies": {
     "commit-message-install": "^1.5.0",
-    "cypress": "^2.0.4"
+    "cypress": "^2.0.4",
+    "execa-wrap": "1.4.0",
+    "mocha": "5.2.0"
+  },
+  "scripts": {
+    "test": "mocha --timeout 180000 test/spec.js"
   }
 }
