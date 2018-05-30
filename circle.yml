@@ -42,7 +42,7 @@ jobs:
       - run: node -v
       - run: npm -v
       - run: npm init -y
-      - run: npm install
+      - run: time npm install
       - run: $(npm bin)/commit-message-install
       - run: $(npm bin)/run-if $(npm bin)/cypress version
       - run: DEBUG=cypress:cli $(npm bin)/run-if $(npm bin)/cypress verify
@@ -57,8 +57,8 @@ jobs:
       - run: node -v
       - run: npm -v
       - run: npm init -y
-      - run: npm ci
-      - run: npm ci
+      - run: time npm ci
+      - run: time npm ci
       - run: $(npm bin)/commit-message-install
       - run: $(npm bin)/run-if $(npm bin)/cypress version
       - run: DEBUG=cypress:cli $(npm bin)/run-if $(npm bin)/cypress verify
