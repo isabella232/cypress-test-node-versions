@@ -14,7 +14,7 @@
   "homepage": "https://github.com/cypress-io/cypress-test-node-versions#readme",
   "devDependencies": {
     "cachedir": "1.2.0",
-    "commit-message-install": "1.10.1",
+    "commit-message-install": "2.2.0",
     "cypress": "3.0.0",
     "execa-wrap": "1.4.0",
     "lazy-ass": "1.6.0",
