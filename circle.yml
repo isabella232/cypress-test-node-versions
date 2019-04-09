@@ -225,7 +225,9 @@ workflows:
   version: 2
   test-cypress-installs:
     jobs:
-      - node-4
+      # stop testing on Node 4 (end-of-life)
+      # https://github.com/cypress-io/cypress-test-node-versions/issues/20
+      # - node-4
       - node-6
       - node-8
       - node-8-npm-ci
