@@ -266,6 +266,8 @@ jobs:
     # a job that sets success commit status
     # after all test jobs finish successfully
     <<: *defaults
+    docker:
+      - image: cypress/base:10
     steps:
       - checkout
       - run: npm install
