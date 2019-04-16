@@ -7,20 +7,6 @@ defaults: &defaults
     - npm_config_engine_strict: 1
 
 jobs:
-  "node-4":
-    <<: *defaults
-    docker:
-      - image: cypress/base:4
-    steps:
-      - checkout
-      # still need to NOT check Node engine version
-      # because commit message install does not allow Node 4
-      # even if it works there!
-      - run: npm_config_engine_strict=0 npm install
-      - run: $(npm bin)/commit-message-install
-      - run: $(npm bin)/run-if $(npm bin)/cypress version
-      - run: DEBUG=cypress:cli $(npm bin)/run-if $(npm bin)/cypress verify
-
   "node-6":
     <<: *defaults
     docker:
@@ -31,6 +17,11 @@ jobs:
       - run: $(npm bin)/commit-message-install
       - run: $(npm bin)/run-if $(npm bin)/cypress version
       - run: DEBUG=cypress:cli $(npm bin)/run-if $(npm bin)/cypress verify
+      # if tests fail, set the failure commit status right away
+      - run:
+          when: on_fail
+          name: Set status check
+          command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
 
   "node-8":
     <<: *defaults
@@ -46,6 +37,11 @@ jobs:
       - run: $(npm bin)/commit-message-install
       - run: $(npm bin)/run-if $(npm bin)/cypress version
       - run: DEBUG=cypress:cli $(npm bin)/run-if $(npm bin)/cypress verify
+      # if tests fail, set the failure commit status right away
+      - run:
+          when: on_fail
+          name: Set status check
+          command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
 
   "node-8-npm-ci":
     <<: *defaults
@@ -62,6 +58,11 @@ jobs:
       - run: $(npm bin)/commit-message-install --else "npm i cypress"
       - run: $(npm bin)/run-if $(npm bin)/cypress version
       - run: DEBUG=cypress:cli $(npm bin)/run-if $(npm bin)/cypress verify
+      # if tests fail, set the failure commit status right away
+      - run:
+          when: on_fail
+          name: Set status check
+          command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
 
   "node-10":
     <<: *defaults
@@ -77,6 +78,11 @@ jobs:
       - run: $(npm bin)/commit-message-install
       - run: $(npm bin)/run-if $(npm bin)/cypress version
       - run: DEBUG=cypress:cli $(npm bin)/run-if $(npm bin)/cypress verify
+      # if tests fail, set the failure commit status right away
+      - run:
+          when: on_fail
+          name: Set status check
+          command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
 
   "node-8-global":
     <<: *defaults
@@ -91,6 +97,11 @@ jobs:
       - run:
           command: cypress run
           working_directory: cypress-test-tiny
+      # if tests fail, set the failure commit status right away
+      - run:
+          when: on_fail
+          name: Set status check
+          command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
 
   "yarn":
     <<: *defaults
@@ -115,6 +126,11 @@ jobs:
       - run:
           command: $(npm bin)/cypress run
           working_directory: cypress-test-tiny
+      # if tests fail, set the failure commit status right away
+      - run:
+          when: on_fail
+          name: Set status check
+          command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
 
   "yarn-1.1":
     <<: *defaults
@@ -133,6 +149,11 @@ jobs:
       - run:
           command: $(npm bin)/cypress version
           working_directory: cypress-test-tiny
+      # if tests fail, set the failure commit status right away
+      - run:
+          when: on_fail
+          name: Set status check
+          command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
 
   "yarn-1.1-cypress-0.20.3":
     <<: *defaults
@@ -149,6 +170,11 @@ jobs:
       - run:
           command: $(npm bin)/cypress version
           working_directory: cypress-test-tiny
+      # if tests fail, set the failure commit status right away
+      - run:
+          when: on_fail
+          name: Set status check
+          command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
 
   "node-8-global-kitchen-sink":
     <<: *defaults
@@ -175,6 +201,11 @@ jobs:
           name: Running tests against Kitchensink example
           command: cypress run
           working_directory: cypress-example-kitchensink
+      # if tests fail, set the failure commit status right away
+      - run:
+          when: on_fail
+          name: Set status check
+          command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
 
   "install-zip-file":
     <<: *defaults
@@ -197,6 +228,11 @@ jobs:
       - run:
           name: Verify installation
           command: $(npm bin)/cypress verify
+      # if tests fail, set the failure commit status right away
+      - run:
+          when: on_fail
+          name: Set status check
+          command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
 
   "chrome-browser":
     <<: *defaults
@@ -220,18 +256,33 @@ jobs:
           name: Test using Chrome
           command: $(npm bin)/run-if $(npm bin)/cypress run --browser chrome
           working_directory: cypress-test-tiny
+      # if tests fail, set the failure commit status right away
+      - run:
+          when: on_fail
+          name: Set status check
+          command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
+
+  after-tests:
+    # a job that sets success commit status
+    # after all test jobs finish successfully
+    <<: *defaults
+    steps:
+      - checkout
+      - run: npm install
+      - run:
+          when: on_success
+          name: Set status check
+          command: $(npm bin)/set-status --state success --description "on CircleCI"
 
 workflows:
   version: 2
   test-cypress-installs:
     jobs:
-      # stop testing on Node 4 (end-of-life)
-      # https://github.com/cypress-io/cypress-test-node-versions/issues/20
-      # - node-4
       - node-6
       - node-8
       - node-8-npm-ci
       - node-10
+
       # disable global installs (permissions issues in Docker container)
       # - node-8-global
       # - node-8-global-kitchen-sink
@@ -244,3 +295,13 @@ workflows:
       ## comment out until we update cypress to add CYPRESS_NPM_PACKAGE_NAME to commit message
       # - install-zip-file
       - chrome-browser
+
+      - after-tests:
+          requires:
+            - node-6
+            - node-8
+            - node-8-npm-ci
+            - node-10
+            - yarn-1.1-cypress-0.20.3
+            - chrome-browser
+
