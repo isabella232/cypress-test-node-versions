@@ -56,6 +56,7 @@ jobs:
       - run: npm -v
       - run: npm init -y
       - run: time npm ci
+      - run: npm install @cypress/commit-message-install
       - run: npm t
       - run: $(npm bin)/commit-message-install --else "npm i cypress"
       - run: $(npm bin)/run-if $(npm bin)/cypress version
@@ -77,6 +78,7 @@ jobs:
       - run: npm -v
       - run: npm init -y
       - run: npm install
+      - run: npm install @cypress/commit-message-install
       - run: $(npm bin)/commit-message-install
       - run: $(npm bin)/run-if $(npm bin)/cypress version
       - run: DEBUG=cypress:cli $(npm bin)/run-if $(npm bin)/cypress verify
