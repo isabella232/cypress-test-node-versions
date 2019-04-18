@@ -14,6 +14,7 @@ jobs:
     steps:
       - checkout
       - run: npm install
+      - run: npm install @cypress/commit-message-install
       - run: $(npm bin)/commit-message-install
       - run: $(npm bin)/run-if $(npm bin)/cypress version
       - run: DEBUG=cypress:cli $(npm bin)/run-if $(npm bin)/cypress verify
@@ -34,6 +35,7 @@ jobs:
       - run: npm -v
       - run: npm init -y
       - run: time npm install
+      - run: npm install @cypress/commit-message-install
       - run: $(npm bin)/commit-message-install
       - run: $(npm bin)/run-if $(npm bin)/cypress version
       - run: DEBUG=cypress:cli $(npm bin)/run-if $(npm bin)/cypress verify
@@ -109,6 +111,7 @@ jobs:
       - image: cypress/base:8
     steps:
       - checkout
+      - run: npm install @cypress/commit-message-install
       - run: npm install -g yarn
       - run: git clone https://github.com/cypress-io/cypress-test-tiny.git
       - run:
@@ -138,6 +141,7 @@ jobs:
       - image: node:8.6
     steps:
       - checkout
+      - run: npm install @cypress/commit-message-install
       - run: npm install -g yarn@1.1.0
       - run: git clone https://github.com/cypress-io/cypress-test-tiny.git
       - run:
@@ -161,6 +165,7 @@ jobs:
       - image: node:8.6
     steps:
       - checkout
+      - run: npm install @cypress/commit-message-install
       - run: npm install -g yarn@1.1.0
       - run: git clone https://github.com/cypress-io/cypress-test-tiny.git
       - run:
@@ -182,6 +187,7 @@ jobs:
       - image: cypress/base:8
     steps:
       - checkout
+      - run: npm install @cypress/commit-message-install
       - run: echo install $CYPRESS_NPM_PACKAGE_NAME
       - run: npm install -g $CYPRESS_NPM_PACKAGE_NAME
       - run: DEBUG=cypress:cli cypress verify
@@ -213,6 +219,7 @@ jobs:
       - image: cypress/base:6
     steps:
       - checkout
+      - run: npm install @cypress/commit-message-install
       - run:
           name: Start NPM package
           command: npm init -y
@@ -240,6 +247,7 @@ jobs:
       - image: cypress/browsers:chrome62
     steps:
       - checkout
+      - run: npm install @cypress/commit-message-install
       - run: git clone https://github.com/cypress-io/cypress-test-tiny.git
       - run:
           working_directory: cypress-test-tiny
@@ -306,4 +314,3 @@ workflows:
             - node-10
             - yarn-1.1-cypress-0.20.3
             - chrome-browser
-
