@@ -312,6 +312,7 @@ workflows:
       - chrome-browser
 
       - after-tests:
+          context: test-runner:commit-status-checks
           requires:
             - node-6
             - node-8
