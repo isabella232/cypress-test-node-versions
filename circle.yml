@@ -132,52 +132,6 @@ jobs:
           name: Set status check
           command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
 
-  # "yarn-1.1":
-  #   <<: *defaults
-  #   docker:
-  #     - image: node:8.6
-  #   steps:
-  #     - checkout
-  #     - run: npm install @cypress/commit-message-install
-  #     - run: npm install -g yarn@1.1.0
-  #     - run: git clone https://github.com/cypress-io/cypress-test-tiny.git
-  #     - run:
-  #         name: Install Cypress with Yarn 1.1.0
-  #         working_directory: cypress-test-tiny
-  #         command: |
-  #           echo Installing Cypress from $CYPRESS_NPM_PACKAGE_NAME
-  #           yarn add -D $CYPRESS_NPM_PACKAGE_NAME
-  #     - run:
-  #         command: $(npm bin)/cypress version
-  #         working_directory: cypress-test-tiny
-  #     # if tests fail, set the failure commit status right away
-  #     - run:
-  #         when: on_fail
-  #         name: Set status check
-  #         command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
-
-  # "yarn-1.1-cypress-0.20.3":
-  #   <<: *defaults
-  #   docker:
-  #     - image: node:8.6
-  #   steps:
-  #     - checkout
-  #     - run: npm install @cypress/commit-message-install
-  #     - run: npm install -g yarn@1.1.0
-  #     - run: git clone https://github.com/cypress-io/cypress-test-tiny.git
-  #     - run:
-  #         name: Install Cypress with Yarn 1.1.0
-  #         working_directory: cypress-test-tiny
-  #         command: yarn add -D cypress@0.20.3
-  #     - run:
-  #         command: $(npm bin)/cypress version
-  #         working_directory: cypress-test-tiny
-  #     # if tests fail, set the failure commit status right away
-  #     - run:
-  #         when: on_fail
-  #         name: Set status check
-  #         command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
-
   "node-8-global-kitchen-sink":
     <<: *defaults
     docker:
