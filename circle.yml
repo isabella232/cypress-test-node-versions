@@ -264,10 +264,44 @@ jobs:
           name: Set status check
           command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
 
-  "chrome-browser":
+  "chrome-browser-62":
+    # really old version of Chrome, should not be supported in v3.5.0
     <<: *defaults
     docker:
       - image: cypress/browsers:chrome62
+    steps:
+      - checkout
+      - run: npm install @cypress/commit-message-install
+      - run: git clone https://github.com/cypress-io/cypress-test-tiny.git
+      - run:
+          working_directory: cypress-test-tiny
+          command: npm install
+      - run:
+          working_directory: cypress-test-tiny
+          command: npm install @cypress/commit-message-install
+      # because cypress-test-tiny no longer installs Cypress
+      # we need to install one
+      - run:
+          working_directory: cypress-test-tiny
+          command: npm install cypress
+      - run:
+          working_directory: cypress-test-tiny
+          command: $(npm bin)/commit-message-install
+      - run:
+          name: Test using Chrome
+          command: $(npm bin)/run-if $(npm bin)/cypress run --browser chrome
+          working_directory: cypress-test-tiny
+      # if tests fail, set the failure commit status right away
+      - run:
+          when: on_fail
+          name: Set status check
+          command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
+
+  "chrome-browser-77":
+    # really old version of Chrome, should not be supported in v3.5.0
+    <<: *defaults
+    docker:
+      - image: cypress/browsers:node12.6.0-chrome77
     steps:
       - checkout
       - run: npm install @cypress/commit-message-install
@@ -337,7 +371,10 @@ workflows:
 
       ## comment out until we update cypress to add CYPRESS_NPM_PACKAGE_NAME to commit message
       # - install-zip-file
-      - chrome-browser:
+      - chrome-browser-62:
+          context: test-runner:commit-status-checks
+
+      - chrome-browser-77:
           context: test-runner:commit-status-checks
 
       - after-tests:
@@ -349,4 +386,5 @@ workflows:
             - node-10
             - node-12
             - yarn-1.1-cypress-0.20.3
-            - chrome-browser
+            - chrome-browser-62
+            - chrome-browser-77
