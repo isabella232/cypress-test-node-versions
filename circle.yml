@@ -11,6 +11,14 @@ commands:
       - run: $(npm bin)/run-if $(npm bin)/cypress version
       - run: DEBUG=cypress:cli $(npm bin)/run-if $(npm bin)/cypress verify
 
+  send-status:
+    description: Send failed status right away
+    steps:
+      - run:
+          when: on_fail
+          name: Set status check
+          command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
+
 defaults: &defaults
   parallelism: 1
   working_directory: ~/app
@@ -24,17 +32,7 @@ jobs:
       - image: cypress/base:6
     steps:
       - install-and-test
-      # - checkout
-      # - run: npm install
-      # - run: npm install @cypress/commit-message-install
-      # - run: $(npm bin)/commit-message-install
-      # - run: $(npm bin)/run-if $(npm bin)/cypress version
-      # - run: DEBUG=cypress:cli $(npm bin)/run-if $(npm bin)/cypress verify
-      # if tests fail, set the failure commit status right away
-      - run:
-          when: on_fail
-          name: Set status check
-          command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
+      - send-status
 
   "node-8":
     <<: *defaults
