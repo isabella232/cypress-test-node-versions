@@ -293,10 +293,14 @@ workflows:
   version: 2
   test-cypress-installs:
     jobs:
-      - node-6
-      - node-8
-      - node-8-npm-ci
-      - node-10
+      - node-6:
+          context: test-runner:commit-status-checks
+      - node-8:
+          context: test-runner:commit-status-checks
+      - node-8-npm-ci:
+          context: test-runner:commit-status-checks
+      - node-10:
+          context: test-runner:commit-status-checks
 
       # disable global installs (permissions issues in Docker container)
       # - node-8-global
@@ -305,11 +309,13 @@ workflows:
       ## commenting out until we can install packages from yarn in commit message
       # - yarn
       # - yarn-1.1
-      - yarn-1.1-cypress-0.20.3
+      - yarn-1.1-cypress-0.20.3:
+          context: test-runner:commit-status-checks
 
       ## comment out until we update cypress to add CYPRESS_NPM_PACKAGE_NAME to commit message
       # - install-zip-file
-      - chrome-browser
+      - chrome-browser:
+          context: test-runner:commit-status-checks
 
       - after-tests:
           context: test-runner:commit-status-checks
