@@ -40,20 +40,8 @@ jobs:
       - image: cypress/base:8
         user: node
     steps:
-      - checkout
-      - run: node -v
-      - run: npm -v
-      - run: npm init -y
-      - run: time npm install
-      - run: npm install @cypress/commit-message-install
-      - run: $(npm bin)/commit-message-install
-      - run: $(npm bin)/run-if $(npm bin)/cypress version
-      - run: DEBUG=cypress:cli $(npm bin)/run-if $(npm bin)/cypress verify
-      # if tests fail, set the failure commit status right away
-      - run:
-          when: on_fail
-          name: Set status check
-          command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
+      - install-and-test
+      - send-status
 
   "node-8-npm-ci":
     <<: *defaults
@@ -83,20 +71,8 @@ jobs:
       - image: cypress/base:10
         user: node
     steps:
-      - checkout
-      - run: node -v
-      - run: npm -v
-      - run: npm init -y
-      - run: npm install
-      - run: npm install @cypress/commit-message-install
-      - run: $(npm bin)/commit-message-install
-      - run: $(npm bin)/run-if $(npm bin)/cypress version
-      - run: DEBUG=cypress:cli $(npm bin)/run-if $(npm bin)/cypress verify
-      # if tests fail, set the failure commit status right away
-      - run:
-          when: on_fail
-          name: Set status check
-          command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
+      - install-and-test
+      - send-status
 
   "node-12":
     <<: *defaults
@@ -104,20 +80,8 @@ jobs:
       - image: cypress/base:12.12.0
         user: node
     steps:
-      - checkout
-      - run: node -v
-      - run: npm -v
-      - run: npm init -y
-      - run: npm install
-      - run: npm install @cypress/commit-message-install
-      - run: $(npm bin)/commit-message-install
-      - run: $(npm bin)/run-if $(npm bin)/cypress version
-      - run: DEBUG=cypress:cli $(npm bin)/run-if $(npm bin)/cypress verify
-      # if tests fail, set the failure commit status right away
-      - run:
-          when: on_fail
-          name: Set status check
-          command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
+      - install-and-test
+      - send-status
 
   "node-8-global":
     <<: *defaults
