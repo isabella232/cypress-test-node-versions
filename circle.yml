@@ -145,6 +145,7 @@ jobs:
       - image: cypress/base:10
     steps:
       - checkout
+      # TODO cache dependencies to avoid reinstalling Cypress
       - run: npm install @cypress/commit-message-install
       - run:
           when: on_success
