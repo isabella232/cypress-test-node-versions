@@ -1,4 +1,15 @@
-version: 2
+version: 2.1
+
+commands:
+  install-and-test:
+    description: Installs necessary Cypress version and verifies it.
+    steps:
+      - checkout
+      - run: npm install
+      - run: npm install @cypress/commit-message-install
+      - run: $(npm bin)/commit-message-install
+      - run: $(npm bin)/run-if $(npm bin)/cypress version
+      - run: DEBUG=cypress:cli $(npm bin)/run-if $(npm bin)/cypress verify
 
 defaults: &defaults
   parallelism: 1
@@ -12,12 +23,13 @@ jobs:
     docker:
       - image: cypress/base:6
     steps:
-      - checkout
-      - run: npm install
-      - run: npm install @cypress/commit-message-install
-      - run: $(npm bin)/commit-message-install
-      - run: $(npm bin)/run-if $(npm bin)/cypress version
-      - run: DEBUG=cypress:cli $(npm bin)/run-if $(npm bin)/cypress verify
+      - install-and-test
+      # - checkout
+      # - run: npm install
+      # - run: npm install @cypress/commit-message-install
+      # - run: $(npm bin)/commit-message-install
+      # - run: $(npm bin)/run-if $(npm bin)/cypress version
+      # - run: DEBUG=cypress:cli $(npm bin)/run-if $(npm bin)/cypress verify
       # if tests fail, set the failure commit status right away
       - run:
           when: on_fail
