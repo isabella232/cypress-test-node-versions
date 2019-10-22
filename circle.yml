@@ -88,6 +88,27 @@ jobs:
           name: Set status check
           command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
 
+  "node-12":
+    <<: *defaults
+    docker:
+      - image: cypress/base:12.12.0
+        user: node
+    steps:
+      - checkout
+      - run: node -v
+      - run: npm -v
+      - run: npm init -y
+      - run: npm install
+      - run: npm install @cypress/commit-message-install
+      - run: $(npm bin)/commit-message-install
+      - run: $(npm bin)/run-if $(npm bin)/cypress version
+      - run: DEBUG=cypress:cli $(npm bin)/run-if $(npm bin)/cypress verify
+      # if tests fail, set the failure commit status right away
+      - run:
+          when: on_fail
+          name: Set status check
+          command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
+
   "node-8-global":
     <<: *defaults
     docker:
@@ -301,6 +322,8 @@ workflows:
           context: test-runner:commit-status-checks
       - node-10:
           context: test-runner:commit-status-checks
+      - node-12:
+          context: test-runner:commit-status-checks
 
       # disable global installs (permissions issues in Docker container)
       # - node-8-global
@@ -324,5 +347,6 @@ workflows:
             - node-8
             - node-8-npm-ci
             - node-10
+            - node-12
             - yarn-1.1-cypress-0.20.3
             - chrome-browser
