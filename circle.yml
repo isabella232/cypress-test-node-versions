@@ -170,51 +170,51 @@ jobs:
           name: Set status check
           command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
 
-  "yarn-1.1":
-    <<: *defaults
-    docker:
-      - image: node:8.6
-    steps:
-      - checkout
-      - run: npm install @cypress/commit-message-install
-      - run: npm install -g yarn@1.1.0
-      - run: git clone https://github.com/cypress-io/cypress-test-tiny.git
-      - run:
-          name: Install Cypress with Yarn 1.1.0
-          working_directory: cypress-test-tiny
-          command: |
-            echo Installing Cypress from $CYPRESS_NPM_PACKAGE_NAME
-            yarn add -D $CYPRESS_NPM_PACKAGE_NAME
-      - run:
-          command: $(npm bin)/cypress version
-          working_directory: cypress-test-tiny
-      # if tests fail, set the failure commit status right away
-      - run:
-          when: on_fail
-          name: Set status check
-          command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
+  # "yarn-1.1":
+  #   <<: *defaults
+  #   docker:
+  #     - image: node:8.6
+  #   steps:
+  #     - checkout
+  #     - run: npm install @cypress/commit-message-install
+  #     - run: npm install -g yarn@1.1.0
+  #     - run: git clone https://github.com/cypress-io/cypress-test-tiny.git
+  #     - run:
+  #         name: Install Cypress with Yarn 1.1.0
+  #         working_directory: cypress-test-tiny
+  #         command: |
+  #           echo Installing Cypress from $CYPRESS_NPM_PACKAGE_NAME
+  #           yarn add -D $CYPRESS_NPM_PACKAGE_NAME
+  #     - run:
+  #         command: $(npm bin)/cypress version
+  #         working_directory: cypress-test-tiny
+  #     # if tests fail, set the failure commit status right away
+  #     - run:
+  #         when: on_fail
+  #         name: Set status check
+  #         command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
 
-  "yarn-1.1-cypress-0.20.3":
-    <<: *defaults
-    docker:
-      - image: node:8.6
-    steps:
-      - checkout
-      - run: npm install @cypress/commit-message-install
-      - run: npm install -g yarn@1.1.0
-      - run: git clone https://github.com/cypress-io/cypress-test-tiny.git
-      - run:
-          name: Install Cypress with Yarn 1.1.0
-          working_directory: cypress-test-tiny
-          command: yarn add -D cypress@0.20.3
-      - run:
-          command: $(npm bin)/cypress version
-          working_directory: cypress-test-tiny
-      # if tests fail, set the failure commit status right away
-      - run:
-          when: on_fail
-          name: Set status check
-          command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
+  # "yarn-1.1-cypress-0.20.3":
+  #   <<: *defaults
+  #   docker:
+  #     - image: node:8.6
+  #   steps:
+  #     - checkout
+  #     - run: npm install @cypress/commit-message-install
+  #     - run: npm install -g yarn@1.1.0
+  #     - run: git clone https://github.com/cypress-io/cypress-test-tiny.git
+  #     - run:
+  #         name: Install Cypress with Yarn 1.1.0
+  #         working_directory: cypress-test-tiny
+  #         command: yarn add -D cypress@0.20.3
+  #     - run:
+  #         command: $(npm bin)/cypress version
+  #         working_directory: cypress-test-tiny
+  #     # if tests fail, set the failure commit status right away
+  #     - run:
+  #         when: on_fail
+  #         name: Set status check
+  #         command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
 
   "node-8-global-kitchen-sink":
     <<: *defaults
@@ -378,8 +378,8 @@ workflows:
       ## commenting out until we can install packages from yarn in commit message
       # - yarn
       # - yarn-1.1
-      - yarn-1.1-cypress-0.20.3:
-          context: test-runner:commit-status-checks
+      # - yarn-1.1-cypress-0.20.3:
+      #     context: test-runner:commit-status-checks
 
       ## comment out until we update cypress to add CYPRESS_NPM_PACKAGE_NAME to commit message
       # - install-zip-file
@@ -397,6 +397,6 @@ workflows:
             - node-8-npm-ci
             - node-10
             - node-12
-            - yarn-1.1-cypress-0.20.3
+            # - yarn-1.1-cypress-0.20.3
             - chrome-browser-62
             - chrome-browser-77
