@@ -1,4 +1,23 @@
-version: 2
+version: 2.1
+
+commands:
+  install-and-test:
+    description: Installs necessary Cypress version and verifies it.
+    steps:
+      - checkout
+      - run: npm install
+      - run: npm install @cypress/commit-message-install
+      - run: $(npm bin)/commit-message-install
+      - run: $(npm bin)/run-if $(npm bin)/cypress version
+      - run: DEBUG=cypress:cli $(npm bin)/run-if $(npm bin)/cypress verify
+
+  send-status:
+    description: Send failed status right away
+    steps:
+      - run:
+          when: on_fail
+          name: Set status check
+          command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
 
 defaults: &defaults
   parallelism: 1
@@ -12,17 +31,8 @@ jobs:
     docker:
       - image: cypress/base:6
     steps:
-      - checkout
-      - run: npm install
-      - run: npm install @cypress/commit-message-install
-      - run: $(npm bin)/commit-message-install
-      - run: $(npm bin)/run-if $(npm bin)/cypress version
-      - run: DEBUG=cypress:cli $(npm bin)/run-if $(npm bin)/cypress verify
-      # if tests fail, set the failure commit status right away
-      - run:
-          when: on_fail
-          name: Set status check
-          command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
+      - install-and-test
+      - send-status
 
   "node-8":
     <<: *defaults
@@ -30,20 +40,8 @@ jobs:
       - image: cypress/base:8
         user: node
     steps:
-      - checkout
-      - run: node -v
-      - run: npm -v
-      - run: npm init -y
-      - run: time npm install
-      - run: npm install @cypress/commit-message-install
-      - run: $(npm bin)/commit-message-install
-      - run: $(npm bin)/run-if $(npm bin)/cypress version
-      - run: DEBUG=cypress:cli $(npm bin)/run-if $(npm bin)/cypress verify
-      # if tests fail, set the failure commit status right away
-      - run:
-          when: on_fail
-          name: Set status check
-          command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
+      - install-and-test
+      - send-status
 
   "node-8-npm-ci":
     <<: *defaults
@@ -61,11 +59,7 @@ jobs:
       - run: $(npm bin)/commit-message-install --else "npm i cypress"
       - run: $(npm bin)/run-if $(npm bin)/cypress version
       - run: DEBUG=cypress:cli $(npm bin)/run-if $(npm bin)/cypress verify
-      # if tests fail, set the failure commit status right away
-      - run:
-          when: on_fail
-          name: Set status check
-          command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
+      - send-status
 
   "node-10":
     <<: *defaults
@@ -73,20 +67,8 @@ jobs:
       - image: cypress/base:10
         user: node
     steps:
-      - checkout
-      - run: node -v
-      - run: npm -v
-      - run: npm init -y
-      - run: npm install
-      - run: npm install @cypress/commit-message-install
-      - run: $(npm bin)/commit-message-install
-      - run: $(npm bin)/run-if $(npm bin)/cypress version
-      - run: DEBUG=cypress:cli $(npm bin)/run-if $(npm bin)/cypress verify
-      # if tests fail, set the failure commit status right away
-      - run:
-          when: on_fail
-          name: Set status check
-          command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
+      - install-and-test
+      - send-status
 
   "node-12":
     <<: *defaults
@@ -94,175 +76,8 @@ jobs:
       - image: cypress/base:12.12.0
         user: node
     steps:
-      - checkout
-      - run: node -v
-      - run: npm -v
-      - run: npm init -y
-      - run: npm install
-      - run: npm install @cypress/commit-message-install
-      - run: $(npm bin)/commit-message-install
-      - run: $(npm bin)/run-if $(npm bin)/cypress version
-      - run: DEBUG=cypress:cli $(npm bin)/run-if $(npm bin)/cypress verify
-      # if tests fail, set the failure commit status right away
-      - run:
-          when: on_fail
-          name: Set status check
-          command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
-
-  "node-8-global":
-    <<: *defaults
-    docker:
-      - image: cypress/base:8
-    steps:
-      - checkout
-      - run: echo install $CYPRESS_NPM_PACKAGE_NAME
-      - run: npm install -g $CYPRESS_NPM_PACKAGE_NAME
-      - run: DEBUG=cypress:cli cypress verify
-      - run: git clone https://github.com/cypress-io/cypress-test-tiny.git
-      - run:
-          command: cypress run
-          working_directory: cypress-test-tiny
-      # if tests fail, set the failure commit status right away
-      - run:
-          when: on_fail
-          name: Set status check
-          command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
-
-  "yarn":
-    <<: *defaults
-    docker:
-      - image: cypress/base:8
-    steps:
-      - checkout
-      - run: npm install @cypress/commit-message-install
-      - run: npm install -g yarn
-      - run: git clone https://github.com/cypress-io/cypress-test-tiny.git
-      - run:
-          name: Install Cypress with Yarn
-          working_directory: cypress-test-tiny
-          command: |
-            echo install $CYPRESS_NPM_PACKAGE_NAME
-            yarn add -D $CYPRESS_NPM_PACKAGE_NAME
-      - run:
-          command: $(npm bin)/cypress version
-          working_directory: cypress-test-tiny
-      - run:
-          command: $(npm bin)/cypress verify
-          working_directory: cypress-test-tiny
-      - run:
-          command: $(npm bin)/cypress run
-          working_directory: cypress-test-tiny
-      # if tests fail, set the failure commit status right away
-      - run:
-          when: on_fail
-          name: Set status check
-          command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
-
-  "yarn-1.1":
-    <<: *defaults
-    docker:
-      - image: node:8.6
-    steps:
-      - checkout
-      - run: npm install @cypress/commit-message-install
-      - run: npm install -g yarn@1.1.0
-      - run: git clone https://github.com/cypress-io/cypress-test-tiny.git
-      - run:
-          name: Install Cypress with Yarn 1.1.0
-          working_directory: cypress-test-tiny
-          command: |
-            echo Installing Cypress from $CYPRESS_NPM_PACKAGE_NAME
-            yarn add -D $CYPRESS_NPM_PACKAGE_NAME
-      - run:
-          command: $(npm bin)/cypress version
-          working_directory: cypress-test-tiny
-      # if tests fail, set the failure commit status right away
-      - run:
-          when: on_fail
-          name: Set status check
-          command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
-
-  "yarn-1.1-cypress-0.20.3":
-    <<: *defaults
-    docker:
-      - image: node:8.6
-    steps:
-      - checkout
-      - run: npm install @cypress/commit-message-install
-      - run: npm install -g yarn@1.1.0
-      - run: git clone https://github.com/cypress-io/cypress-test-tiny.git
-      - run:
-          name: Install Cypress with Yarn 1.1.0
-          working_directory: cypress-test-tiny
-          command: yarn add -D cypress@0.20.3
-      - run:
-          command: $(npm bin)/cypress version
-          working_directory: cypress-test-tiny
-      # if tests fail, set the failure commit status right away
-      - run:
-          when: on_fail
-          name: Set status check
-          command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
-
-  "node-8-global-kitchen-sink":
-    <<: *defaults
-    docker:
-      - image: cypress/base:8
-    steps:
-      - checkout
-      - run: npm install @cypress/commit-message-install
-      - run: echo install $CYPRESS_NPM_PACKAGE_NAME
-      - run: npm install -g $CYPRESS_NPM_PACKAGE_NAME
-      - run: DEBUG=cypress:cli cypress verify
-      - run: git clone https://github.com/cypress-io/cypress-example-kitchensink.git
-      - run:
-          name: Install Kitchensink deps (but only the server)
-          working_directory: cypress-example-kitchensink
-          command: |
-            git checkout 0.20.0
-            npm install --production
-      - run:
-          name: Start Kitchensink example server
-          command: npm start
-          working_directory: cypress-example-kitchensink
-          background: true
-      - run:
-          name: Running tests against Kitchensink example
-          command: cypress run
-          working_directory: cypress-example-kitchensink
-      # if tests fail, set the failure commit status right away
-      - run:
-          when: on_fail
-          name: Set status check
-          command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
-
-  "install-zip-file":
-    <<: *defaults
-    docker:
-      - image: cypress/base:6
-    steps:
-      - checkout
-      - run: npm install @cypress/commit-message-install
-      - run:
-          name: Start NPM package
-          command: npm init -y
-      - run:
-          name: Download binary using curl
-          command: curl -o cypress.zip -L $CYPRESS_BINARY_VERSION
-      - run:
-          name: Show files
-          command: ls -l
-      - run:
-          name: Install cypress.zip
-          command: CYPRESS_BINARY_VERSION=cypress.zip npm i $CYPRESS_NPM_PACKAGE_NAME
-      - run:
-          name: Verify installation
-          command: $(npm bin)/cypress verify
-      # if tests fail, set the failure commit status right away
-      - run:
-          when: on_fail
-          name: Set status check
-          command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
+      - install-and-test
+      - send-status
 
   "chrome-browser-62":
     # really old version of Chrome, should not be supported in v3.5.0
@@ -291,11 +106,7 @@ jobs:
           name: Test using Chrome
           command: $(npm bin)/run-if $(npm bin)/cypress run --browser chrome
           working_directory: cypress-test-tiny
-      # if tests fail, set the failure commit status right away
-      - run:
-          when: on_fail
-          name: Set status check
-          command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
+      - send-status
 
   "chrome-browser-77":
     # really old version of Chrome, should not be supported in v3.5.0
@@ -324,11 +135,7 @@ jobs:
           name: Test using Chrome
           command: $(npm bin)/run-if $(npm bin)/cypress run --browser chrome
           working_directory: cypress-test-tiny
-      # if tests fail, set the failure commit status right away
-      - run:
-          when: on_fail
-          name: Set status check
-          command: $(npm bin)/set-status --state failure --description "$CIRCLE_STAGE on CircleCI"
+      - send-status
 
   after-tests:
     # a job that sets success commit status
@@ -338,6 +145,7 @@ jobs:
       - image: cypress/base:10
     steps:
       - checkout
+      # TODO cache dependencies to avoid reinstalling Cypress
       - run: npm install @cypress/commit-message-install
       - run:
           when: on_success
@@ -358,22 +166,8 @@ workflows:
           context: test-runner:commit-status-checks
       - node-12:
           context: test-runner:commit-status-checks
-
-      # disable global installs (permissions issues in Docker container)
-      # - node-8-global
-      # - node-8-global-kitchen-sink
-
-      ## commenting out until we can install packages from yarn in commit message
-      # - yarn
-      # - yarn-1.1
-      - yarn-1.1-cypress-0.20.3:
-          context: test-runner:commit-status-checks
-
-      ## comment out until we update cypress to add CYPRESS_NPM_PACKAGE_NAME to commit message
-      # - install-zip-file
       - chrome-browser-62:
           context: test-runner:commit-status-checks
-
       - chrome-browser-77:
           context: test-runner:commit-status-checks
 
@@ -385,6 +179,6 @@ workflows:
             - node-8-npm-ci
             - node-10
             - node-12
-            - yarn-1.1-cypress-0.20.3
+            # - yarn-1.1-cypress-0.20.3
             - chrome-browser-62
             - chrome-browser-77
