@@ -1,12 +1,16 @@
 version: 2.1
 
 commands:
+  install-commit-install:
+    steps:
+      - run: npm install @cypress/commit-message-install@2.5.2
+
   install-and-test:
     description: Installs necessary Cypress version and verifies it.
     steps:
       - checkout
       - run: npm install
-      - run: npm install @cypress/commit-message-install
+      - install-commit-install
       - run: $(npm bin)/commit-message-install
       - run: $(npm bin)/run-if $(npm bin)/cypress version
       - run: DEBUG=cypress:cli $(npm bin)/run-if $(npm bin)/cypress verify
@@ -54,7 +58,7 @@ jobs:
       - run: npm -v
       - run: npm init -y
       - run: time npm ci
-      - run: npm install @cypress/commit-message-install
+      - install-commit-install
       - run: npm t
       - run: $(npm bin)/commit-message-install --else "npm i cypress"
       - run: $(npm bin)/run-if $(npm bin)/cypress version
@@ -86,14 +90,14 @@ jobs:
       - image: cypress/browsers:node12.6.0-chrome77
     steps:
       - checkout
-      - run: npm install @cypress/commit-message-install
+      - install-commit-install
       - run: git clone https://github.com/cypress-io/cypress-test-tiny.git
       - run:
           working_directory: cypress-test-tiny
           command: npm install
       - run:
           working_directory: cypress-test-tiny
-          command: npm install @cypress/commit-message-install
+          command: npm install @cypress/commit-message-install@2.5.2
       # because cypress-test-tiny no longer installs Cypress
       # we need to install one
       - run:
@@ -117,7 +121,7 @@ jobs:
     steps:
       - checkout
       # TODO cache dependencies to avoid reinstalling Cypress
-      - run: npm install @cypress/commit-message-install
+      - install-commit-install
       - run:
           when: on_success
           name: Set status check
