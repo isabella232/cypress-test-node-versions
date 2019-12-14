@@ -14,7 +14,7 @@
   "homepage": "https://github.com/cypress-io/cypress-test-node-versions#readme",
   "devDependencies": {
     "cachedir": "2.3.0",
-    "cypress": "3.7.0",
+    "cypress": "3.8.0",
     "execa-wrap": "1.4.0",
     "lazy-ass": "1.6.0",
     "mocha": "6.2.2"
