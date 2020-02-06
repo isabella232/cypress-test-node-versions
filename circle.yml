@@ -30,14 +30,6 @@ defaults: &defaults
     - npm_config_engine_strict: 1
 
 jobs:
-  "node-6":
-    <<: *defaults
-    docker:
-      - image: cypress/base:6
-    steps:
-      - install-and-test
-      - send-status
-
   "node-8":
     <<: *defaults
     docker:
@@ -131,8 +123,6 @@ workflows:
   version: 2
   test-cypress-installs:
     jobs:
-      - node-6:
-          context: test-runner:commit-status-checks
       - node-8:
           context: test-runner:commit-status-checks
       - node-8-npm-ci:
@@ -147,7 +137,6 @@ workflows:
       - after-tests:
           context: test-runner:commit-status-checks
           requires:
-            - node-6
             - node-8
             - node-8-npm-ci
             - node-10
