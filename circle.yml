@@ -39,6 +39,15 @@ jobs:
       - install-and-test
       - send-status
 
+  "node-8-0-0":
+    <<: *defaults
+    docker:
+      - image: cypress/base:8.0.0
+        user: node
+    steps:
+      - install-and-test
+      - send-status
+
   "node-8-npm-ci":
     <<: *defaults
     docker:
@@ -123,6 +132,8 @@ workflows:
   version: 2
   test-cypress-installs:
     jobs:
+      - node-8-0-0:
+          context: test-runner:commit-status-checks
       - node-8:
           context: test-runner:commit-status-checks
       - node-8-npm-ci:
@@ -137,6 +148,7 @@ workflows:
       - after-tests:
           context: test-runner:commit-status-checks
           requires:
+            - node-8-0-0
             - node-8
             - node-8-npm-ci
             - node-10
