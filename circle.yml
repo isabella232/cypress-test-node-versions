@@ -11,7 +11,7 @@ commands:
       - checkout
       - run: npm install
       - install-commit-install
-      - run: $(npm bin)/commit-message-install
+      - run: $(npm bin)/commit-message-install --else "npm install cypress"
       - run: $(npm bin)/run-if $(npm bin)/cypress version
       - run: DEBUG=cypress:cli $(npm bin)/run-if $(npm bin)/cypress verify
 
