@@ -16,7 +16,7 @@
     "cachedir": "2.3.0",
     "execa-wrap": "1.4.0",
     "lazy-ass": "1.6.0",
-    "mocha": "6.2.2"
+    "mocha": "6.2.3"
   },
   "scripts": {
     "test": "mocha --timeout 180000 test/spec.js",
