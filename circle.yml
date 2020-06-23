@@ -30,28 +30,19 @@ defaults: &defaults
     - npm_config_engine_strict: 1
 
 jobs:
-  "node-8":
+  "node-10-0-0":
     <<: *defaults
     docker:
-      - image: cypress/base:8
+      - image: cypress/base:10.0.0
         user: node
     steps:
       - install-and-test
       - send-status
 
-  "node-8-0-0":
+  "node-10-npm-ci":
     <<: *defaults
     docker:
-      - image: cypress/base:8.0.0
-        user: node
-    steps:
-      - install-and-test
-      - send-status
-
-  "node-8-npm-ci":
-    <<: *defaults
-    docker:
-      - image: cypress/base:8
+      - image: cypress/base:10.0.0
         user: node
     steps:
       - checkout
@@ -132,11 +123,9 @@ workflows:
   version: 2
   test-cypress-installs:
     jobs:
-      - node-8-0-0:
+      - node-10-0-0:
           context: test-runner:commit-status-checks
-      - node-8:
-          context: test-runner:commit-status-checks
-      - node-8-npm-ci:
+      - node-10-npm-ci:
           context: test-runner:commit-status-checks
       - node-10:
           context: test-runner:commit-status-checks
@@ -148,9 +137,9 @@ workflows:
       - after-tests:
           context: test-runner:commit-status-checks
           requires:
-            - node-8-0-0
-            - node-8
-            - node-8-npm-ci
+            - node-10-0-0
+            - node-10
+            - node-10-npm-ci
             - node-10
             - node-12
             - chrome-browser-77
